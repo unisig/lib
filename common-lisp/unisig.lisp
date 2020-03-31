@@ -16,3 +16,17 @@
            (and (= len (read-sequence sig stream))
                 (if uuid-p sig
                     (ext:convert-string-from-bytes sig charset:utf-8)))))))
+
+(defun write-unisig (stream format)
+  (let* ((uuid-p (etypecase format
+                   (string nil)
+                   ((vector (unsigned-byte 8)) t)))
+         (sig (if uuid-p format
+                  (ext:convert-string-to-bytes format charset:utf-8)))
+         (lenbyte (if uuid-p 0 (length sig))))
+    (when (and uuid-p (not (= 16 (length format))))
+      (error "Bad UUID: ~S" format))
+    (write-sequence +magic+ stream)
+    (write-byte lenbyte stream)
+    (write-sequence sig stream)
+    format))
