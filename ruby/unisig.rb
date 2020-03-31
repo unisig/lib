@@ -18,6 +18,8 @@ def read(io)
 end
 
 def write(io, name)
+  raise unless name.length <= 255
+  raise unless io.binmode?
   if name.is_a?(Array)
     raise unless name.length == 16
     sig = name
