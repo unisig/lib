@@ -29,7 +29,6 @@ def write(io, name)
     sig = name.unpack("utf-8", "U*")
     is_uuid = false
   end
-  io.write(MAGIC)
-  io.write(bytes([if is_uuid then 0 else sig.length end]))
-  io.write(sig)
+  lenbyte = if is_uuid then 0 else sig.length end
+  io.write(MAGIC + lenbyte.chr + sig)
 end
