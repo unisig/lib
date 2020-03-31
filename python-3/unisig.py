@@ -24,5 +24,5 @@ def write(stream, name):
         sig = name.encode("utf-8", errors="strict")
         is_uuid = False
     stream.write(MAGIC)
-    stream.write(bytes([len(sig)]))
+    stream.write(bytes([0 if is_uuid else len(sig)]))
     stream.write(sig)
